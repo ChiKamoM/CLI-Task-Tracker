@@ -11,7 +11,7 @@
 // List all tasks that are in progress
 
 const tasks = [
-    {id:"1",
+    {id:1,
     description:'Buy groceries',
     status:'in-progress',
     createedAt:'',
@@ -19,10 +19,34 @@ const tasks = [
 ]
 
 const now = new Date()
-const status = ['done', 'iniprogress', 'complete']
+const statuses = ['todo', 'in-progress', 'complete']
 
-function newTask(id,description,status,createdAt,updatedAt){
-    
+function nextID(array){
+    const index = Number(array.length - 1)
+    return array[index].id + 1
 }
 
-console.log(now)
+const  exampleTask = "Finish homework"
+
+function newTask(task){
+    tasks.push({
+        id:nextID(tasks),
+        description:task,
+        status:statuses[1],
+        createedAt:now,
+        updatedAt:''
+    })
+}
+
+function updateTask(id,time) {
+    
+    tasks.indexOf()
+    // selectedTask.updatedAt = now
+    console.log(selectedTask.id)
+    console.log(`The following task was selected ${selectedTask}`)
+    
+}
+newTask(exampleTask)
+updateTask(2)
+console.log(tasks )
+//array.findS
