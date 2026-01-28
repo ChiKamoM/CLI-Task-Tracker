@@ -2,13 +2,15 @@
 
 // Mark a task as in progress or done X
 
-// List all tasks
+// List all tasks X
 
-// List all tasks that are done
+// List all tasks that are done X
 
-// List all tasks that are not done
+// List all tasks that are not done x
 
-// List all tasks that are in progress
+// List all tasks that are in progress X
+
+const fs = require('node:fs');
 
 function wait(ms){
    var start = new Date().getTime();
@@ -17,46 +19,21 @@ function wait(ms){
      end = new Date().getTime();
   }
 }
-
-const tasks = [
-  {
-    id: 0,
-    description: "Buy groceries",
-    status: "in-progress",
-    createdAt: now,
-    updatedAt: ""
-  },
-  {
-    id: 1,
-    description: "Finish homework",
-    status: "todo",
-    createdAt: now,
-    updatedAt: ""
-  },
-  {
-    id: 2,
-    description: "Clean bedroom",
-    status: "done",
-    createdAt: now,
-    updatedAt: now
-  },
-  {
-    id: 3,
-    description: "Read JavaScript chapter",
-    status: "in-progress",
-    createdAt: now,
-    updatedAt: ""
-  },
-  {
-    id: 4,
-    description: "Hand in homework",
-    status: "done",
-    createdAt: now,
-    updatedAt: now
-  }
-]
-
 let now = new Date()
+
+function getTasks(){
+    fs.readFile("./tasks.json","utf-8",(err,data)=>{
+        if(err){
+            console.log("The following error occured", err)
+        }else{
+            console.log(JSON.parse(data))
+        
+        }
+    })
+}
+
+let tasks = getTasks()
+
 const statuses = ['todo', 'in-progress', 'done']
 
 const  exampleTask = "Finish chores"
@@ -68,14 +45,18 @@ function nextID(array){
 }
 
 function newTask(task){
-    console.log(tasks)
+    const newID = nextID(tasks)
     tasks.push({
-        id:nextID(tasks),
+        id:newID,
         description:task,
         status:statuses[1],
         createedAt:now,
         updatedAt:''
     })
+   const addedTask = tasks.find(task => task.id == newID);
+
+   let description = addedTask.description
+    console.log(`Task "${description}" added with id ${newID}`)
 }
 
 function updateTask(id,newTask) {    
@@ -84,20 +65,20 @@ function updateTask(id,newTask) {
     const taskID = selectedTask.id
     tasks[taskID].description = newTask
     tasks[taskID].updatedAt = new Date()
-    console.log(selectedTask)
+    console.log(tasks[id])
 
 }else{
         console.log(`No task with id ${id}`)
     }    
 }
 
-function updateStatus(id,status){
-    if(tasks.find(task => task.id == id)){
-        const selectedTask= tasks.find(task => task.id = id)
-        const taskID = selectedTask.id
+function updateStatus(taskID,status){
+    
+    if(tasks.find(task=> task.id === taskID )){
+        const selectedTask = tasks.find(task=> task.id === taskID )
         tasks[taskID].status = statuses[status]
         tasks[taskID].updatedAt = new Date()
-        console.log(selectedTask)
+        console.log(tasks[taskID])
 
 }else{
         console.log(`No task with id ${id}`)
@@ -111,33 +92,43 @@ function listTasks(){
 function listIncompleteTasks(){
     let incomplete = []
     tasks.forEach(task => {
-        task.status =='to-do' || task.status ==  'in-progress' ? incomplete.push(push):null
+        task.status =='todo' || task.status ==  'in-progress' ? incomplete.push(task):null
     });
     if(incomplete.length>0){
-        console.log(inProgress)
+        console.log(incomplete)
     }
 }
 
 function listCompletTasks(){
     let complete = []
     tasks.forEach(task => {
-        task.status =='done' ? complete.push(push):null
+        console.log(task.status)
+        task.status =='done' ? complete.push(task):null
+        
     });
     if(complete.length>0){
-        console.log(inProgress)
+        console.log(complete)
     }
 }
 
 function listInProgressTasks(){
     let inProgress = []
     tasks.forEach(task => {
-        task.status =='in-progress' ? incomplete.push(push):null
+        task.status =='in-progress' ? inProgress.push(task):null
     });
     if(inProgress.length>0){
         console.log(inProgress)
     }
 }
 
-newTask(exampleTask)
-console.log(tasks)
+
+
+// newTask(exampleTask)
+// updateTask(4,editedTask)
+// listTasks()
+// updateStatus(0,2)
+// listCompletTasks()
+// listIncompleteTasks()
+// listInProgressTasks()
+
 
