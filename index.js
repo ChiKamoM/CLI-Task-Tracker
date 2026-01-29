@@ -21,18 +21,32 @@ function wait(ms){
 }
 let now = new Date()
 
-function getTasks(){
-    fs.readFile("./tasks.json","utf-8",(err,data)=>{
-        if(err){
-            console.log("The following error occured", err)
-        }else{
-            console.log(JSON.parse(data))
-        
-        }
-    })
+let tasks
+
+// function getTasks(){
+//     fs.readFileSync("./tasks.json","utf-8",(err,unParsedData)=>{
+//         if(err){
+//             console.log("The following error occured", err)
+//             return
+//         }else{
+//             tasks = JSON.parse(unParsedData)
+//             console.log("Task setting successful")
+//         }
+//     })
+// }
+// console.log('executing get tasks',getTasks())
+
+try {
+    const data = fs.readFileSync('./tasks.json','utf-8')
+    return JSON.parse(data)
+} catch (error) {
+    console.log("Error occured", error)
 }
 
-let tasks = getTasks()
+console.log(tasks)
+getTasks()
+console.log(tasks)
+
 
 const statuses = ['todo', 'in-progress', 'done']
 
