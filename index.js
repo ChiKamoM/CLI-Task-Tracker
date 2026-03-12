@@ -19,46 +19,33 @@ function wait(ms){
      end = new Date().getTime();
   }
 }
+
 let now = new Date()
 
-let tasks
+// let tasks
 
-// function getTasks(){
-//     fs.readFileSync("./tasks.json","utf-8",(err,unParsedData)=>{
-//         if(err){
-//             console.log("The following error occured", err)
-//             return
-//         }else{
-//             tasks = JSON.parse(unParsedData)
-//             console.log("Task setting successful")
-//         }
-//     })
-// }
-// console.log('executing get tasks',getTasks())
 
-try {
-    const data = fs.readFileSync('./tasks.json','utf-8')
-    return JSON.parse(data)
-} catch (error) {
-    console.log("Error occured", error)
+
+ function getTasks() {
+    try {
+        const data = fs.readFileSync('./tasks.json','utf-8')
+        return JSON.parse(data)
+    } catch (error) {
+        console.log("Error occured", error)
+    }  
 }
 
-console.log(tasks)
-getTasks()
-console.log(tasks)
 
 
 const statuses = ['todo', 'in-progress', 'done']
 
-const  exampleTask = "Finish chores"
-const editedTask = "Hand in chores"
 
 function nextID(array){
     const index = Number(array.length - 1)
     return array[index].id + 1
 }
 
-function newTask(task){
+function newTask(task,tasks){
     const newID = nextID(tasks)
     tasks.push({
         id:newID,
@@ -73,7 +60,7 @@ function newTask(task){
     console.log(`Task "${description}" added with id ${newID}`)
 }
 
-function updateTask(id,newTask) {    
+function updateTask(tasks,id,newTask) {    
     if(tasks.find(task => task.id == id)){
     const selectedTask= tasks.find(task => task.id = id)
     const taskID = selectedTask.id
@@ -86,7 +73,7 @@ function updateTask(id,newTask) {
     }    
 }
 
-function updateStatus(taskID,status){
+function updateStatus(tasks,taskID,status){
     
     if(tasks.find(task=> task.id === taskID )){
         const selectedTask = tasks.find(task=> task.id === taskID )
@@ -99,50 +86,59 @@ function updateStatus(taskID,status){
     }
 }
 
-function listTasks(){
+updateStatus(getTasks(),4,1)
+
+function listTasks(tasks){
     console.log(tasks)
 }
 
-function listIncompleteTasks(){
+// listTasks(getTasks())
+
+function listIncompleteTasks(tasks){
     let incomplete = []
     tasks.forEach(task => {
         task.status =='todo' || task.status ==  'in-progress' ? incomplete.push(task):null
     });
     if(incomplete.length>0){
         console.log(incomplete)
+    }else{
+        console.log("No in progress tasks")
     }
 }
 
-function listCompletTasks(){
+// listIncompleteTasks(getTasks())
+
+function listCompletTasks(tasksArray){
     let complete = []
-    tasks.forEach(task => {
+    tasksArray.forEach(task => {
         console.log(task.status)
         task.status =='done' ? complete.push(task):null
         
     });
     if(complete.length>0){
         console.log(complete)
+    }else{
+        console.log("No complete tasks")
     }
 }
 
-function listInProgressTasks(){
+// listCompletTasks(getTasks())
+
+function listInProgressTasks(tasks){
     let inProgress = []
     tasks.forEach(task => {
         task.status =='in-progress' ? inProgress.push(task):null
     });
     if(inProgress.length>0){
         console.log(inProgress)
+    }else{
+        console.log("No in progress tasks")
     }
 }
 
+// listInProgressTasks(getTasks())
 
 
-// newTask(exampleTask)
-// updateTask(4,editedTask)
-// listTasks()
-// updateStatus(0,2)
-// listCompletTasks()
-// listIncompleteTasks()
-// listInProgressTasks()
+
 
 
